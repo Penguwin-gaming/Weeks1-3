@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class RatElbow : MonoBehaviour
 {
 
-    //the amount of rotation the elbow produces when the key is held, can be adjusted
-    public float elbowRot = 1;
+    //the animation curve that the elbow will use
+    public AnimationCurve curve;
+
+    [Range(0, 1)]
+    public float e;
 
     // Start is called before the first frame update
     void Start()
@@ -17,14 +21,18 @@ public class RatElbow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //checks if the player inputs an A or D button press and rotates the forearm the amount declared above
-        if (Input.GetKey(KeyCode.S))
+        //checks if the player inputs an W or S button press and rotates the forearm based on the curve values
+        //the if statements check to make sure the forearm doesn't over rotate if the keys keep being held
+        if (Input.GetKey(KeyCode.S) && e >= 0)
         {
-            transform.Rotate(0, 0, -elbowRot);
+            e -= Time.deltaTime;
+            transform.Rotate(0, 0, -curve.Evaluate(e));
         }
-        else if (Input.GetKey(KeyCode.W))
+
+        if (Input.GetKey(KeyCode.W) && e <= 1)
         {
-            transform.Rotate(0, 0, elbowRot);
+            e += Time.deltaTime;
+            transform.Rotate(0, 0, curve.Evaluate(e));
         }
     }
 }

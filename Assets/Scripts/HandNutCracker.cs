@@ -5,7 +5,7 @@ using UnityEngine;
 public class HandNutCracker : MonoBehaviour
 {
     //the amount of rotation the hand produces when the key is held, can be adjusted
-    public float rotSpeed = 0.1f;
+    public float rotSpeed = 0.5f;
 
     // Start is called before the first frame update
     void Start()

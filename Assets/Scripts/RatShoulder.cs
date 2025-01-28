@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class RatShoulder : MonoBehaviour
 {
+    //the animation curve that the shoulder will use
+    public AnimationCurve curve;
 
-    //the amount of rotation the shoulder produces when the key is held, can be adjusted
-    public float shoulderRot = 1;
+    [Range(0, 1)]
+    public float s;
 
     // Start is called before the first frame update
     void Start()
@@ -17,14 +19,19 @@ public class RatShoulder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //checks if the player inputs an A or D button press and rotates the arm the amount declared above
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(0, 0, -shoulderRot);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(0, 0, shoulderRot);
-        }
+
+        //checks if the player inputs an A or D button press and rotates the arm based on the curve values
+        //the if statements check to make sure the arms don't over rotate if the keys keep being held
+        if (Input.GetKey(KeyCode.A) && s >= 0)
+            {
+                s -= Time.deltaTime;
+                transform.Rotate(0, 0, -curve.Evaluate(s));
+            }
+           
+        if (Input.GetKey(KeyCode.D) && s <= 1)
+            {
+                s += Time.deltaTime;
+                transform.Rotate(0, 0, curve.Evaluate(s));
+            } 
     }
 }
